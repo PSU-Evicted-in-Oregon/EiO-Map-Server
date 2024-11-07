@@ -1,0 +1,10 @@
+# Ignore the real config file with actual keys
+config.js
+
+# Add a sample config file that will be committed
+!config.sample.js
+
+# Ignore any other sensitive files
+*.env
+.env*
+secrets.json
