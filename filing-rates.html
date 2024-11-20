@@ -152,15 +152,17 @@
                 layers: ['county', 'tracts']
             });
             document.getElementById('co_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
                 <p><big><big>${hoverit[0].properties.filing_rate_pretty}</big></big><small> average yearly rate</p>
-                <p>${hoverit[0].properties.filings} filings<br>${hoverit[0].properties.rental_units} rental units<br></p></small>` :
+                <p>${hoverit[0].properties.filings_pretty} filings<br>${hoverit[0].properties.rental_units_pretty} rental units<br></p></small>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
             document.getElementById('tr_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
                 <p><small>${hoverit[0].properties.census_tract_name}</small></p>
                 <p><big><big>${hoverit[0].properties.filing_rate_pretty}</big></big><small> average yearly rate</p>
-                <p>${hoverit[0].properties.filings} filings<br>${hoverit[0].properties.rental_units} rental units<br></p></small>` :
+                <p>${hoverit[0].properties.filings_pretty} filings<br>${hoverit[0].properties.rental_units_pretty} rental units<br></p></small>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
         });
         // Add custom tileset source. This tileset 
@@ -184,7 +186,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v4' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v6' // change as needed
         });
 
         // County layer
@@ -202,11 +204,12 @@
                         'interpolate',
                         ['linear'],
                         ['get', 'filing_rate'], // PUT NAME OF COLUMN TO DISPLAY HERE
+                        // BREAK POINTS
                         0, "#FFFFFF",
-                        3, "#fecc5c",
-                        4, "#fd8d3c",
-                        4.5, "#f03b20",
-                        5.5, "#51087e"
+                        2, "#fecc5c",
+                        2.5, "#fd8d3c",
+                        3, "#f03b20",
+                        6, "#51087e"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "filing_rate"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
@@ -231,8 +234,8 @@
                         ['get', 'filing_rate'], // PUT NAME OF COLUMN TO DISPLAY HERE
                         0, "#FFFFFF",
                         2, "#fecc5c",
-                        6, "#fd8d3c",
-                        12, "#f03b20",
+                        4, "#fd8d3c",
+                        6, "#f03b20",
                         25, "#51087e"
                     ],
                     "fill-opacity": ["case", ["==", ["get", "filing_rate"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE

@@ -152,13 +152,15 @@
                 layers: ['county', 'tracts']
             });
             document.getElementById('co_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
-                <p><big><big>${hoverit[0].properties.filings}</big></big><small> filings</p>` :
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
+                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big><small> filings</p>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
             document.getElementById('tr_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
                 <p><small>${hoverit[0].properties.census_tract_name}</small></p>
-                <p><big><big>${hoverit[0].properties.filings}</big></big><small> filings</p>` :
+                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big><small> filings</p>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
         });
         // Add custom tileset source. This tileset 
@@ -182,7 +184,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v4' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v6' // change as needed
         });
 
         // County layer
@@ -203,7 +205,7 @@
                         0, "#FFFFFF",
                         25, "#fecc5c",
                         150, "#fd8d3c",
-                        750, "#f03b20",
+                        600, "#f03b20",
                         1500, "#51087e"
                     ],
                     // When NA, give it more opacity
@@ -230,7 +232,7 @@
                         0, "#FFFFFF",
                         10, "#fecc5c",
                         25, "#fd8d3c",
-                        75, "#f03b20",
+                        50, "#f03b20",
                         150, "#51087e"
                     ],
                     "fill-opacity": ["case", ["==", ["get", "filings"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE

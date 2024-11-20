@@ -100,7 +100,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">200</div>
+            <div class="label">750</div>
         </div>
         <!-- Change date below as needed -->
         <p>Oct 2023 to<br>Sep 2024</p>
@@ -152,15 +152,17 @@
                 layers: ['county', 'tracts']
             });
             document.getElementById('co_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
-                <p><big><big>${hoverit[0].properties.judgments}</big></big><small> judgments of eviction</p>
-                <p>${hoverit[0].properties.filings} filings<br>${hoverit[0].properties.rental_units} rental units<br></p></small>` :
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
+                <p><big><big>${hoverit[0].properties.judgments_pretty}</big></big><small> judgments of eviction</p>
+                <p>${hoverit[0].properties.filings_pretty} filings<br>${hoverit[0].properties.rental_units_pretty} rental units<br></p></small>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
             document.getElementById('tr_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
+                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
                 <p><small>${hoverit[0].properties.census_tract_name}</small></p>
-                <p><big><big>${hoverit[0].properties.judgments}</big></big><small> judgments of eviction</p>
-                <p>${hoverit[0].properties.filings} filings<br>${hoverit[0].properties.rental_units} rental units<br></p></small>` :
+                <p><big><big>${hoverit[0].properties.judgments_pretty}</big></big><small> judgments of eviction</p>
+                <p>${hoverit[0].properties.filings_pretty} filings<br>${hoverit[0].properties.rental_units_pretty} rental units<br></p></small>
+                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
         });
         // Add custom tileset source. This tileset 
@@ -184,7 +186,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v4' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v6' // change as needed
         });
 
         // County layer
@@ -205,8 +207,8 @@
                         0, "#ffffcc",
                         25, "#a1dab4",
                         50, "#41b6c4",
-                        100, "#2c7fb8",
-                        200, "#253494"
+                        200, "#2c7fb8",
+                        750, "#253494"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "judgments"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
@@ -233,7 +235,7 @@
                         2, "#a1dab4",
                         6, "#41b6c4",
                         12, "#2c7fb8",
-                        25, "#253494"
+                        50, "#253494"
                     ],
                     "fill-opacity": ["case", ["==", ["get", "judgments"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
