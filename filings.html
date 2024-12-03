@@ -103,7 +103,7 @@
             <div class="label">1,500</div>
         </div>
         <!-- Change date below as needed -->
-        <p>Oct 2023 to<br>Sep 2024</p>
+        <p>Nov 2023 to<br>Oct 2024</p>
         <p><small><i>Zoom in for tracts</i></small></p>
         <div id="co_pd">
             <hr>
@@ -114,12 +114,12 @@
         <h2>Census Tract Eviction Filings</h2>
         <div class="row colors"></div>
         <div class="row labels">
-            <div class="label">0%</div>
+            <div class="label">0</div>
             <div class="label"> </div>
             <div class="label">150</div>
         </div>
 <!-- Change date below as needed -->
-        <p>Oct 2023 to<br>Sep 2024</p>
+        <p>Nov 2023 to<br>Oct 2024</p>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
         <div id="tr_pd">
             <hr>
@@ -132,7 +132,7 @@
     const map = new mapboxgl.Map({
         container: 'map',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/mapbox/light-v11',
+        style: 'mapbox://styles/evictedinoregon/cm48uxunm008i01st4dag59cs',
         center: [-120.5, 44.2],
         minZoom: 5,
         zoom: 5.7
@@ -152,15 +152,15 @@
                 layers: ['county', 'tracts']
             });
             document.getElementById('co_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
-                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big><small> filings</p>
-                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
+                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
+                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big></p>
+                <p><small>${hoverit[0].properties.data_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
             document.getElementById('tr_pd').innerHTML = hoverit.length ?
-                `<hr><big><b>${hoverit[0].properties.multi_court_county_name}</b></big>
+                `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
                 <p><small>${hoverit[0].properties.census_tract_name}</small></p>
-                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big><small> filings</p>
-                <p><small>${hoverit[0].properties.multi_court_subtitle}</p>` :
+                <p><big><big>${hoverit[0].properties.filings_pretty}</big></big></p>
+                <p><small>${hoverit[0].properties.data_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
         });
         // Add custom tileset source. This tileset 
@@ -184,7 +184,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v6' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v11' // change as needed
         });
 
         // County layer
@@ -212,7 +212,7 @@
                     "fill-opacity": ["case", ["==", ["get", "filings"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
             },
-            'road-label-simple' // Add layer below labels
+            'settlement-subdivision-label' // Add layer below labels
         );
         // Tract layer
         map.addLayer({
@@ -238,7 +238,7 @@
                     "fill-opacity": ["case", ["==", ["get", "filings"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
             },
-            'road-label-simple' // Add layer below labels
+            'settlement-subdivision-label' // Add layer below labels
         );
     }); // End load wait
 
