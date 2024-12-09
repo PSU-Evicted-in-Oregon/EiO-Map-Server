@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Oregon Eviction Filings</title>
+    <title>Oregon Judgments of Eviction</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
@@ -42,11 +42,12 @@
         border-radius: 10px;
         /*        top: 10px;*/
         left: 10px;
-        margin: 10px;
-        width: 120px;
-        background-color: #ffffff80;
+        margin: 10px;        
+        width: 140px;
+        background-color: #fff;
         padding: 10px 10px;
         z-index: 1002;
+        opacity: 1;
     }
 
     .content {
@@ -83,9 +84,23 @@
         right: 10px;
         margin: 10px;
         /*        width: 120px;*/
-        background-color: #ffffff80;
+        background-color: #fff;
         padding: 10px 10px;
         z-index: 1002;
+    }
+    #map-title {
+        font-family: 'Roboto';
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 50%;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 24px;
+        text-align: center;
+        color: #222;
+        background: #fff;
     }
 
     /* Legend details */
@@ -94,6 +109,16 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
     <div id="map"></div>
+    <div id="map-title"></div>
+    <div id="zoom-settings" style="visibility: hidden;height: 0px;">
+        <!-- zoom settings are an attempt to preserve zoom across all three maps on final implementation, but unable to get it all the way. Leaving for future reference -->
+        <div id="current-zoom-level"></div>
+        <div id="current-center-position-lat"></div>
+        <div id="current-center-position-lng"></div>
+        <div id="default-zoom-level">6.0</div>
+        <div id="default-center-position-lat">44.2</div>
+        <div id="default-center-position-lng">-120.5</div>
+    </div>
     <div id="county-legend" class="legend">
         <h2>County Judgments of Eviction</h2>
         <div class="row colors"></div>
@@ -129,13 +154,19 @@
     <!-- Initialize Map -->
     <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZXZpY3RlZGlub3JlZ29uIiwiYSI6ImNtMjByNHBhNDA5aTYycm9iZzZsa3dzMmEifQ.cs440rGr7r6QE1hcZq9n-g';
+    const startingZoom = parseFloat(document.getElementById("default-zoom-level").innerHTML)
+    const startingCenterLat = parseFloat(document.getElementById("default-center-position-lat").innerHTML)
+    const startingCenterLng = parseFloat(document.getElementById("default-center-position-lng").innerHTML)
+    
     const map = new mapboxgl.Map({
         container: 'map',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/evictedinoregon/cm48uxunm008i01st4dag59cs',
-        center: [-120.5, 44.2],
+        style: 'mapbox://styles/evictedinoregon/cm4agras600mz01rc0uaf98fz',
+        center: [startingCenterLng, startingCenterLat],
         minZoom: 5,
-        zoom: 5.7
+        zoom: startingZoom,
+        attributionControl: false
+        // preserveDrawingBuffer: true // required for downloading to work, haven't made it work yet
     });
     // Zoom at which it changes layers
     const zoomThreshold = 7;
@@ -165,28 +196,12 @@
                 <p><small>${hoverit[0].properties.data_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
         });
-        // Add custom tileset source. This tileset 
-        // RELIC: Add a custom vector tileset source. The tileset used in
-        // this example contains a feature for every state and
-        // county in the U.S.
-        // Each state contains four properties. For example:
-        //     {
-        //         isState: true,
-        //         name: "Wyoming",
-        //         population: 584153,
-        //         state: 56
-        //     }
-        // Each county contains four properties. For example:
-        //     {
-        //         county: 16049,
-        //         isCounty: true,
-        //         name: "Idaho County",
-        //         population: 16315
-        //     }
 
+        // Tileset: see documentation/R script for more detail on what fields
+        // are available. Or look in our account and poke around the tilesets
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v11' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v12' // change as needed
         });
 
         // County layer
@@ -247,13 +262,25 @@
     const countyLegendEl = document.getElementById('county-legend');
     const tractLegendEl = document.getElementById('tract-legend');
     map.on('zoom', () => {
+        // check zoom, edit legend and title accordingly
         if (map.getZoom() > zoomThreshold) {
             countyLegendEl.style.display = 'none';
             tractLegendEl.style.display = 'block';
+            document.getElementById('map-title').innerHTML = "Judgments of Eviction by Census Tract, Oregon"
         } else {
             countyLegendEl.style.display = 'block';
             tractLegendEl.style.display = 'none';
+            document.getElementById('map-title').innerHTML = "Judgments of Eviction by County, Oregon"
         }
+        // record zoom level and center position
+        document.getElementById('current-zoom-level').innerHTML = map.getZoom()
+        document.getElementById('current-center-position-lat').innerHTML = map.getCenter().lat
+        document.getElementById('current-center-position-lng').innerHTML = map.getCenter().lng
+    });
+    map.on('mouseup', () => {
+        // record zoom level and center position
+        document.getElementById('current-center-position-lat').innerHTML = map.getCenter().lat
+        document.getElementById('current-center-position-lng').innerHTML = map.getCenter().lng
     });
     // Add the control to the map.
     map.addControl(
@@ -262,10 +289,18 @@
             mapboxgl: mapboxgl
         }), 'top-right'
     );
+    // attribution
+    map.addControl(new mapboxgl.AttributionControl({
+        customAttribution: 'Map: Evicted in Oregon | Source: Oregon Judicial Department\'s court records'
+    }));
     // Zoom levels    
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
     // Full screen option
     map.addControl(new mapboxgl.FullscreenControl({ container: document.querySelector('body') }), 'bottom-right');
+    // scale control
+    map.addControl(new mapboxgl.ScaleControl({maxWidth: 120, unit: 'imperial'}), 'bottom-left');
+
+    document.getElementById('map-title').innerHTML = "Judgments of Eviction by County, Oregon"
     </script>
 </body>
 
