@@ -13,7 +13,61 @@
 <body>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+    @media (max-width: 768px) {
+        #map-title {
+            position: absolute !important;
+            left: 10px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            margin: 0 !important;
+            width: 69% !important;
+            transform: none !important;
+            font-size: 13px;
+            padding: 4px 8px;
+            top: 6px !important;  /* Moved up higher */
+            text-align: left;
+            right: auto !important;
+            word-wrap: break-word;
+        }
 
+        .legend {
+            width: 80% !important; 
+            font-size: 12px !important;
+            bottom: 35px !important;
+            left: 0px !important;
+            padding-right: 10px !important;
+            padding-left: 5px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            position: absolute;
+            position: fixed;
+        }
+        
+        .mapboxgl-ctrl-geocoder {
+            min-width: 30% !important;
+            width: 30% !important;
+            max-width: 30% !important;
+            height: 30px !important;
+            font-size: 14px !important;
+        }
+        
+        .mapboxgl-ctrl-geocoder input[type='text'] {
+            height: 30px !important;
+            padding: 6px 24px !important;
+            font-size: 10px !important;
+        }
+
+        .mapboxgl-ctrl-geocoder--icon {
+            top: 6px !important;
+            left: 5px !important;
+            font-size: 14px !important;
+        }
+
+        .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button {
+            top: 3px !important;
+            font-size: 14px !important;
+        }
+    }
     body {
         margin: 0;
         padding: 0;
@@ -35,6 +89,10 @@
         font-size: 18px;
         font-family: 'Roboto';
     }
+    h4 {
+        font-size: 14px;
+        font-family: 'Roboto';
+    }
 
     .legend {
         font-family: 'Roboto';
@@ -42,8 +100,8 @@
         border-radius: 10px;
         /*        top: 10px;*/
         left: 10px;
-        margin: 10px;        
-        width: 140px;
+        margin: 10px; 
+        width: 120px;
         background-color: #fff;
         padding: 10px 10px;
         z-index: 1002;
@@ -103,6 +161,31 @@
         background: #fff;
     }
 
+    .column {
+        float: left;
+        width: 25%;
+        padding: 5px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        padding: 5px;
+    }
+    .column_full {
+        float: left;
+        width: 100%;
+        padding: 5px
+    }
+    #co_pd_mobile {
+        font-size: 10px;
+    }
+    #tr_pd_mobile {
+        font-size: 10px;
+    }
+
     /* Legend details */
     </style>
     <!-- Load the `mapbox-gl-geocoder` plugin. -->
@@ -110,16 +193,7 @@
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
     <div id="map"></div>
     <div id="map-title"></div>
-    <div id="zoom-settings" style="visibility: hidden;height: 0px;">
-        <!-- zoom settings are an attempt to preserve zoom across all three maps on final implementation, but unable to get it all the way. Leaving for future reference -->
-        <div id="current-zoom-level"></div>
-        <div id="current-center-position-lat"></div>
-        <div id="current-center-position-lng"></div>
-        <div id="default-zoom-level">6.0</div>
-        <div id="default-center-position-lat">44.2</div>
-        <div id="default-center-position-lng">-120.5</div>
-    </div>
-    <div id="county-legend" class="legend">
+    <div id="county-legend" class="legend" style="display: none">
         <h2>County Judgments of Eviction</h2>
         <div class="row colors"></div>
         <div class="row labels">
@@ -127,12 +201,36 @@
             <div class="label"> </div>
             <div class="label">750</div>
         </div>
-        <!-- Change date below as needed -->
-        <p>Nov 2023 to<br>Oct 2024</p>
-        <p><small><i>Zoom in for tracts</i></small></p>
+        <div id="date-range-cl"></div>
+        <p><small><i>Zoom in for census tracts</i></small></p>
         <div id="co_pd">
             <hr>
             <p>Hover over a geography for details!</p>
+        </div>
+    </div>
+    <div id="county-legend-mobile" class="legend" style="display: none">
+        <div class="column">
+            <h4>County Judgments of Eviction</h4>
+            <div class="row colors"></div>
+            <div class="row labels">
+                <div class="label">0</div>
+                <div class="label"> </div>
+                <div class="label">750</div>
+            </div>
+        </div>
+        <div class="column">
+            <div id="date-range-clm"></div>
+            <p><small><i>Zoom in for census tracts</i></small></p>
+        </div>
+        <div class="column">
+            <div id="co_pd_mobile">
+                <p>Hover over a geography for details!</p>
+            </div>
+        </div>
+        <div class="column_full">
+            <div id="co_ds_mobile">
+                <p></p>
+            </div>
         </div>
     </div>
     <div id="tract-legend" class="legend" style="display: none">
@@ -143,34 +241,57 @@
             <div class="label"> </div>
             <div class="label">50</div>
         </div>
-<!-- Change date below as needed -->
-        <p>Nov 2023 to<br>Oct 2024</p>
+        <div id="date-range-tl"></div>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
         <div id="tr_pd">
             <hr>
             <p>Hover over a geography for details!<br></p>
         </div>
     </div>
+    <div id="tract-legend-mobile" class="legend" style="display: none">
+        <div class="column">
+            <h4>Census Tract Judgments of Eviction</h4>
+            <div class="row colors"></div>
+            <div class="row labels">
+                <div class="label">0</div>
+                <div class="label"> </div>
+                <div class="label">50</div>
+            </div>
+        </div>
+        <div class="column">
+            <div id="date-range-tlm"></div>
+            <p><small><i>Zoom out for counties</i></small></p>
+        </div>
+        <div class="column">
+            <div id="tr_pd_mobile">
+                <p>Hover over a geography for details!</p>
+            </div>
+        </div>
+        <div class="column_full">
+            <div id="tr_ds_mobile">
+                <p></p>
+            </div>
+        </div>
+    </div>
     <!-- Initialize Map -->
     <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZXZpY3RlZGlub3JlZ29uIiwiYSI6ImNtMjByNHBhNDA5aTYycm9iZzZsa3dzMmEifQ.cs440rGr7r6QE1hcZq9n-g';
-    const startingZoom = parseFloat(document.getElementById("default-zoom-level").innerHTML)
-    const startingCenterLat = parseFloat(document.getElementById("default-center-position-lat").innerHTML)
-    const startingCenterLng = parseFloat(document.getElementById("default-center-position-lng").innerHTML)
+
+    const screenWidth = screen.width
+    const screenHeight = screen.height
     
     const map = new mapboxgl.Map({
         container: 'map',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-        style: 'mapbox://styles/evictedinoregon/cm4agras600mz01rc0uaf98fz',
-        center: [startingCenterLng, startingCenterLat],
+        style: 'mapbox://styles/evictedinoregon/cm4lnjxir000u01sq1y8pey9s',
+        center: [-120.5, 44.2],
         minZoom: 5,
-        zoom: startingZoom,
+        zoom: 6,
         attributionControl: false
         // preserveDrawingBuffer: true // required for downloading to work, haven't made it work yet
     });
     // Zoom at which it changes layers
     const zoomThreshold = 7;
-
     // BEGIN load wait
     map.on('load', () => {
 
@@ -188,20 +309,37 @@
                 <p>${hoverit[0].properties.filings_pretty_rate_map}<br>${hoverit[0].properties.rental_units_pretty}<br></p></small>
                 <p><small>${hoverit[0].properties.data_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
+            document.getElementById('co_pd_mobile').innerHTML = hoverit.length ?
+                `<br><big><b>${hoverit[0].properties.county_name}</b></big>
+                <p><big>${hoverit[0].properties.judgments_pretty}</big></p>
+                <p>${hoverit[0].properties.filings_pretty_rate_map}<br>${hoverit[0].properties.rental_units_pretty}<br></p></small>`:
+                `<p>Hover over a geography for details!</p>`;
+            document.getElementById('co_ds_mobile').innerHTML = hoverit.length ?
+                `<hr><p><small>${hoverit[0].properties.data_subtitle}</p>` :
+                `<p></p>`;
             document.getElementById('tr_pd').innerHTML = hoverit.length ?
                 `<hr><big><b>${hoverit[0].properties.county_name}</b></big>
                 <p><small>${hoverit[0].properties.census_tract_name}</small></p>
-                <p><big><big>${hoverit[0].properties.judgments_pretty}</big></big><small></p>
+                <p><big>${hoverit[0].properties.judgments_pretty}</big></p>
                 <p>${hoverit[0].properties.filings_pretty_rate_map}<br>${hoverit[0].properties.rental_units_pretty}<br></p></small>
                 <p><small>${hoverit[0].properties.data_subtitle}</p>` :
                 `<hr><p>Hover over a geography for details!</p>`;
+            document.getElementById('tr_pd_mobile').innerHTML = hoverit.length ?
+                `<br><big><b>${hoverit[0].properties.county_name}</b></big>
+                <p><small>${hoverit[0].properties.census_tract_name}</small></p>
+                <p><big>${hoverit[0].properties.judgments_pretty}</big></p>
+                <p>${hoverit[0].properties.filings_pretty_rate_map}<br>${hoverit[0].properties.rental_units_pretty}<br></p></small>` :
+                `<p>Hover over a geography for details!</p>`;
+            document.getElementById('tr_ds_mobile').innerHTML = hoverit.length ?
+                `<hr><p><small>${hoverit[0].properties.data_subtitle}</p>` :
+                `<p><small><i>Zoom out for counties</i></small></p>`;
         });
-
         // Tileset: see documentation/R script for more detail on what fields
         // are available. Or look in our account and poke around the tilesets
+
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v12' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v14' // change as needed
         });
 
         // County layer
@@ -229,7 +367,7 @@
                     "fill-opacity": ["case", ["==", ["get", "judgments"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
             },
-            'settlement-subdivision-label' // Add layer below labels
+            'base-map-xhash' // Add layer below labels
         );
         // Tract layer
         map.addLayer({
@@ -255,32 +393,69 @@
                     "fill-opacity": ["case", ["==", ["get", "judgments"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
             },
-            'settlement-subdivision-label' // Add layer below labels
+            'base-map-xhash' // Add layer below labels
         );
+        
     }); // End load wait
+    map.on('idle', () => {
+        // render legend on idle, since it requires a reference to map data source
+        // and on load, the data hasn't finished loading yet
+        legendData = map.querySourceFeatures('eviction_data',{sourceLayer:'or_zoom'})[0].properties.date_range_pretty;
+        document.getElementById('date-range-cl').innerHTML = `<p>${legendData}</p>`;
+        document.getElementById('date-range-clm').innerHTML = `<p>${legendData}</p>`;
+        document.getElementById('date-range-tl').innerHTML = `<p>${legendData}</p>`;
+        document.getElementById('date-range-tlm').innerHTML = `<p>${legendData}</p>`;
+        // if all legend styles are none:
+        var clDisplay = document.getElementById('county-legend').style.display;
+        var clmDisplay = document.getElementById('county-legend-mobile').style.display;
+        var tlDisplay = document.getElementById('tract-legend').style.display;
+        var tlmDisplay = document.getElementById('tract-legend').style.display;
+        if ((clDisplay == "none") && (clmDisplay == "none") && (tlDisplay == "none") && (tlmDisplay == "none")){
+            if (screenWidth <= 768){
+                document.getElementById('county-legend').style.display = "none";
+                document.getElementById('county-legend-mobile').style.display = "block";
+            } else {
+                document.getElementById('county-legend').style.display = "block";
+                document.getElementById('county-legend-mobile').style.display = "none";
+            }
+        }
+    });
 
     const countyLegendEl = document.getElementById('county-legend');
+    const countyLegendMobileEl = document.getElementById('county-legend-mobile');
     const tractLegendEl = document.getElementById('tract-legend');
+    const tractLengendMobileEl = document.getElementById('tract-legend-mobile'); 
     map.on('zoom', () => {
         // check zoom, edit legend and title accordingly
-        if (map.getZoom() > zoomThreshold) {
+        if ((map.getZoom() > zoomThreshold) && (screenWidth <= 768)){
+            // tract legend mobile
             countyLegendEl.style.display = 'none';
+            countyLegendMobileEl.style.display = 'none';
+            tractLengendMobileEl.style.display = 'block';
+            tractLegendEl.style.display = 'none';
+            document.getElementById('map-title').innerHTML = "Judgments of Eviction by Census Tract, Oregon"
+        } else if ((map.getZoom() > zoomThreshold) && (screenWidth > 768)) {
+            // tract legend desktop
+            countyLegendEl.style.display = 'none';
+            countyLegendMobileEl.style.display = 'none';
+            tractLengendMobileEl.style.display = 'none';
             tractLegendEl.style.display = 'block';
             document.getElementById('map-title').innerHTML = "Judgments of Eviction by Census Tract, Oregon"
+        } else if (screenWidth <= 768) {
+            // county legend mobile
+            countyLegendEl.style.display = 'none';
+            countyLegendMobileEl.style.display = 'block';
+            tractLengendMobileEl.style.display = 'none';
+            tractLegendEl.style.display = 'none';
+            document.getElementById('map-title').innerHTML = "Judgments of Eviction by County, Oregon"
         } else {
+            // county legend desktop
             countyLegendEl.style.display = 'block';
+            countyLegendMobileEl.style.display = 'none';
+            tractLengendMobileEl.style.display = 'none';
             tractLegendEl.style.display = 'none';
             document.getElementById('map-title').innerHTML = "Judgments of Eviction by County, Oregon"
         }
-        // record zoom level and center position
-        document.getElementById('current-zoom-level').innerHTML = map.getZoom()
-        document.getElementById('current-center-position-lat').innerHTML = map.getCenter().lat
-        document.getElementById('current-center-position-lng').innerHTML = map.getCenter().lng
-    });
-    map.on('mouseup', () => {
-        // record zoom level and center position
-        document.getElementById('current-center-position-lat').innerHTML = map.getCenter().lat
-        document.getElementById('current-center-position-lng').innerHTML = map.getCenter().lng
     });
     // Add the control to the map.
     map.addControl(
@@ -298,7 +473,11 @@
     // Full screen option
     map.addControl(new mapboxgl.FullscreenControl({ container: document.querySelector('body') }), 'bottom-right');
     // scale control
-    map.addControl(new mapboxgl.ScaleControl({maxWidth: 120, unit: 'imperial'}), 'bottom-left');
+    var scaleWidth = 75
+    if (screenWidth > 768){
+        scaleWidth = 150
+    }
+    map.addControl(new mapboxgl.ScaleControl({maxWidth: scaleWidth, unit: 'imperial'}), 'top-right');
 
     document.getElementById('map-title').innerHTML = "Judgments of Eviction by County, Oregon"
     </script>
