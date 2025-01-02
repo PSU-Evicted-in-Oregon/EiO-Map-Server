@@ -197,9 +197,9 @@
         <h2>County Eviction Rate</h2>
         <div class="row colors"></div>
         <div class="row labels">
-            <div class="label">0%</div>
+            <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">6%</div>
+            <div class="label">6</div>
         </div>
         <div id="date-range-cl"></div>
         <p><small><i>Zoom in for census tracts</i></small></p>
@@ -213,9 +213,9 @@
             <h4>County Eviction Rate</h4>
             <div class="row colors"></div>
             <div class="row labels">
-                <div class="label">0%</div>
+                <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">6%</div>
+                <div class="label">6</div>
             </div>
         </div>
         <div class="column">
@@ -237,9 +237,9 @@
         <h2>Census Tract Eviction Rate</h2>
         <div class="row colors"></div>
         <div class="row labels">
-            <div class="label">0%</div>
+            <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">25%</div>
+            <div class="label">25</div>
         </div>
         <div id="date-range-tl"></div>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
@@ -253,9 +253,9 @@
             <h4>Census Tract Eviction Rate</h4>
             <div class="row colors"></div>
             <div class="row labels">
-                <div class="label">0%</div>
+                <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">25%</div>
+                <div class="label">25</div>
             </div>
         </div>
         <div class="column">
@@ -297,7 +297,7 @@
 
         // Make pointer default
         map.getCanvas().style.cursor = 'default';
-
+        
         // Hover fills info box
         map.on('mousemove', (event) => {
             const hoverit = map.queryRenderedFeatures(event.point, {
@@ -339,7 +339,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v14' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v17' // change as needed
         });
 
         // County layer
