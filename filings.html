@@ -199,7 +199,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">7,500</div>
+            <div class="label">12,000</div>
         </div>
         <div id="date-range-cl"></div>
         <p><small><i>Zoom in for census tracts</i></small></p>
@@ -215,7 +215,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">7,500</div>
+                <div class="label">12,000</div>
             </div>
         </div>
         <div class="column">
@@ -239,7 +239,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">150</div>
+            <div class="label">270</div>
         </div>
         <div id="date-range-tl"></div>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
@@ -255,7 +255,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">150</div>
+                <div class="label">270</div>
             </div>
         </div>
         <div class="column">
@@ -336,7 +336,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v22' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v23' // change as needed
         });
 
         // County layer
@@ -356,10 +356,10 @@
                         ['get', 'filings'], // PUT NAME OF COLUMN TO DISPLAY HERE
                         // BREAK POINTS
                         0, "#FFFFFF",
-                        25, "#fecc5c",
-                        150, "#fd8d3c",
+                        200, "#fecc5c",
+                        400, "#fd8d3c",
                         600, "#f03b20",
-                        7500, "#51087e"
+                        12000, "#51087e"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "filings"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
@@ -383,10 +383,10 @@
                         ['linear'],
                         ['get', 'filings'], // PUT NAME OF COLUMN TO DISPLAY HERE
                         0, "#FFFFFF",
-                        10, "#fecc5c",
+                        15, "#fecc5c",
                         25, "#fd8d3c",
                         50, "#f03b20",
-                        150, "#51087e"
+                        275, "#51087e"
                     ],
                     "fill-opacity": ["case", ["==", ["get", "filings"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }

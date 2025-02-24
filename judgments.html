@@ -199,7 +199,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">750</div>
+            <div class="label">850</div>
         </div>
         <div id="date-range-cl"></div>
         <p><small><i>Zoom in for census tracts</i></small></p>
@@ -215,7 +215,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">750</div>
+                <div class="label">850</div>
             </div>
         </div>
         <div class="column">
@@ -339,7 +339,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v22' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v23' // change as needed
         });
 
         // County layer
@@ -358,8 +358,8 @@
                         ['linear'],
                         ['get', 'judgments'], // PUT NAME OF COLUMN TO DISPLAY HERE
                         0, "#ffffcc",
-                        25, "#a1dab4",
-                        50, "#41b6c4",
+                        30, "#a1dab4",
+                        60, "#41b6c4",
                         200, "#2c7fb8",
                         750, "#253494"
                     ],
@@ -384,6 +384,7 @@
                         'interpolate',
                         ['linear'],
                         ['get', 'judgments'], // PUT NAME OF COLUMN TO DISPLAY HERE
+                        // BREAK POINTS
                         0, "#ffffcc",
                         2, "#a1dab4",
                         6, "#41b6c4",

@@ -199,7 +199,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">6</div>
+            <div class="label">7</div>
         </div>
         <div id="date-range-cl"></div>
         <p><small><i>Zoom in for census tracts</i></small></p>
@@ -215,7 +215,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">6</div>
+                <div class="label">7</div>
             </div>
         </div>
         <div class="column">
@@ -239,7 +239,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">35</div>
+            <div class="label">45</div>
         </div>
         <div id="date-range-tl"></div>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
@@ -255,7 +255,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">35</div>
+                <div class="label">45</div>
             </div>
         </div>
         <div class="column">
@@ -339,7 +339,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v22' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v23' // change as needed
         });
 
         // County layer
@@ -360,9 +360,9 @@
                         // BREAK POINTS
                         0, "#FFFFFF",
                         2, "#fecc5c",
-                        2.5, "#fd8d3c",
-                        3, "#f03b20",
-                        6, "#51087e"
+                        3, "#fd8d3c",
+                        4, "#f03b20",
+                        7, "#51087e"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "filing_rate"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
@@ -388,8 +388,8 @@
                         0, "#FFFFFF",
                         2, "#fecc5c",
                         4, "#fd8d3c",
-                        6, "#f03b20",
-                        25, "#51087e"
+                        7, "#f03b20",
+                        45, "#51087e"
                     ],
                     "fill-opacity": ["case", ["==", ["get", "filing_rate"], null], 0.1, 0.6] // PUT NAME OF COLUMN TO DISPLAY HERE
                 }
