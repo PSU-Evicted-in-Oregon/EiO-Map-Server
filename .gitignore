@@ -8,3 +8,4 @@ config.js
 *.env
 .env*
 secrets.json
+.DS_Store
