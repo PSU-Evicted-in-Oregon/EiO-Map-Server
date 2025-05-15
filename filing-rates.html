@@ -339,7 +339,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v28' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v29' // change as needed
         });
 
         // County layer
@@ -362,7 +362,7 @@
                         2, "#fecc5c",
                         3, "#fd8d3c",
                         4, "#f03b20",
-                        7, "#51087e"
+                        8, "#51087e"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "filing_rate"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
