@@ -215,7 +215,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">11000</div>
+                <div class="label">1500</div>
             </div>
         </div>
         <div class="column">
@@ -239,7 +239,7 @@
         <div class="row labels">
             <div class="label">0</div>
             <div class="label"> </div>
-            <div class="label">50</div>
+            <div class="label">55</div>
         </div>
         <div id="date-range-tl"></div>
         <!-- <p><small><i>Zoom out for counties</i></small></p> -->
@@ -255,7 +255,7 @@
             <div class="row labels">
                 <div class="label">0</div>
                 <div class="label"> </div>
-                <div class="label">50</div>
+                <div class="label">55</div>
             </div>
         </div>
         <div class="column">
@@ -339,7 +339,7 @@
 
         map.addSource('eviction_data', {
             'type': 'vector',
-            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v29' // change as needed
+            'url': 'mapbox://evictedinoregon.or_zoom_tileset_v30' // change as needed
         });
 
         // County layer
@@ -361,7 +361,7 @@
                         30, "#a1dab4",
                         60, "#41b6c4",
                         200, "#2c7fb8",
-                        750, "#253494"
+                        1500, "#253494"
                     ],
                     // When NA, give it more opacity
                     "fill-opacity": ["case", ["==", ["get", "judgments"], null], 0.1, 0.7] // PUT NAME OF COLUMN TO DISPLAY HERE
